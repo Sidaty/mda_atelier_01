@@ -11,6 +11,7 @@ class MdaAtelier1App extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.orange,
+        accentColor: Colors.green,
       ),
       home: HomePage(),
     );

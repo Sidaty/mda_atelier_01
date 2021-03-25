@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mda_atelier_01/create_menu_item_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,43 +17,58 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Le menu'),
       ),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            UserAccountsDrawerHeader(
-              accountName: Text('Amadou Konate'),
-              accountEmail: Text('amadou.konate@gmail.com'),
-              currentAccountPicture: CircleAvatar(
-                child: Icon(Icons.account_circle),
-              ),
-            ),
-          ],
-        ),
-      ),
+      drawer: MyDrawer(),
       body: Center(
         child: Column(
-          children: [
-            Checkbox(
-              value: checkboxValue,
-              onChanged: (value) {
-                print('Checkbox clicked : $value');
-                checkboxValue = value;
-
-                setState(() {});
-              },
-            ),
-            Container(
-              height: 200,
-              width: 200.0,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(20.0),
-                border: Border.all(color: Colors.green, width: 10.0)
-              ),
-            ),
-          ],
+          children: [],
         ),
       ),
     );
   }
+}
+
+class MyDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Column(
+        children: [
+          UserAccountsDrawerHeader(
+            accountName: Text('Amadou Konate'),
+            accountEmail: Text('amadou.konate@gmail.com'),
+            currentAccountPicture: CircleAvatar(
+              child: Icon(Icons.account_circle),
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              children: [
+                ListTile(
+                  leading: CircleAvatar(
+                    child: Icon(Icons.add),
+                  ),
+                  title: Text('Ajouter un plat'),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    Navigator.pop(context);
+
+                    navigateTo(context, CreateMenuItemPage());
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+navigateTo(BuildContext context, Widget page) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) {
+      return page;
+    }),
+  );
 }
