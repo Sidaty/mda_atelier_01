@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mda_atelier_01/home_page.dart';
 import 'package:mda_atelier_01/image_selector.dart';
@@ -8,12 +10,13 @@ class CreateMenuItemPage extends StatefulWidget {
 }
 
 class _CreateMenuItemPageState extends State<CreateMenuItemPage> {
+  String primaryImage = images[0];
+  String secondaryImage = images[1];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Ajouter un plat'),
-      ),
+      appBar: AppBar(title: Text('Ajouter un plat')),
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
         children: [
@@ -62,28 +65,56 @@ class _CreateMenuItemPageState extends State<CreateMenuItemPage> {
             label: Text('Image principale'),
             icon: Icon(Icons.camera_alt_outlined),
             onPressed: () {
-              navigateTo(context, ImageSelector());
+              // int index = Random().nextInt(12);
+              // String image = images[index];
+              // primaryImageSelected(image);
+              navigateTo(
+                context,
+                ImageSelector(onImageSelected: primaryImageSelected),
+              );
             },
           ),
+          Image.asset(primaryImage),
           SizedBox(height: 40.0),
           ElevatedButton.icon(
             label: Text('Image secondaire'),
             icon: Icon(Icons.camera_alt_outlined),
             onPressed: () {
-              navigateTo(context, ImageSelector());
+              int index = Random().nextInt(12);
+              String image = images[index];
+              secondaryImageSelected(image);
+              // navigateTo(context, ImageSelector(
+              //   onImageSelected: (selectedImage) {
+              //     setState(() {
+              //       secondaryImage = selectedImage;
+              //     });
+              //   },
+              // ));
             },
           ),
+          Image.asset(secondaryImage),
           SizedBox(height: 40.0),
-          ElevatedButton.icon(
-            label: Text('Image secondaire'),
-            icon: Icon(Icons.camera_alt_outlined),
+          ElevatedButton(
+            child: Text('Creer'),
             style: ElevatedButton.styleFrom(
-              primary: Theme.of(context).accentColor
+              primary: Theme.of(context).accentColor,
             ),
             onPressed: () {},
           ),
         ],
       ),
     );
+  }
+
+  primaryImageSelected(String selectedImage) {
+    setState(() {
+      primaryImage = selectedImage;
+    });
+  }
+
+  secondaryImageSelected(String selectedImage) {
+    setState(() {
+      secondaryImage = selectedImage;
+    });
   }
 }
