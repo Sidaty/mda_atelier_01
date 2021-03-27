@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mda_atelier_01/cart_page.dart';
 import 'package:mda_atelier_01/create_menu_item_page.dart';
 import 'package:mda_atelier_01/menu_item_card.dart';
 import 'package:mda_atelier_01/models/menu_item.dart';
@@ -17,11 +19,36 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
+  onItemAdd(MenuItem menuItem) {
+    print('#### item added : ${menuItem.title}');
+    MenuItemCart menuItemCart;
+    if (cart.containsKey(menuItem.id)) {
+      menuItemCart = cart[menuItem.id];
+    } else {
+      menuItemCart = MenuItemCart(
+        menuItem: menuItem,
+        quantity: 0,
+      );
+      cart[menuItem.id] = menuItemCart;
+    }
+    menuItemCart.quantity++;
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    int totalQuantity = 0;
+    for(MenuItemCart menuItemCart in cart.values) {
+      totalQuantity += menuItemCart.quantity;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Le menu'),
+        actions: [
+          CartItemCounter(itemCount: totalQuantity),
+          SizedBox(width: 10.0),
+        ],
       ),
       drawer: MyDrawer(onMenuItemAdded: onMenuItemAdded),
       body: ListView.separated(
@@ -32,7 +59,7 @@ class _HomePageState extends State<HomePage> {
         ),
         itemBuilder: (context, index) {
           MenuItem menuItem = menus[index];
-          return MenuItemCard(menuItem: menuItem);
+          return MenuItemCard(menuItem: menuItem, onItemAdd: onItemAdd);
         },
         separatorBuilder: (_, __) => SizedBox(height: 25.0),
       ),
@@ -76,6 +103,41 @@ class MyDrawer extends StatelessWidget {
                   },
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CartItemCounter extends StatelessWidget {
+  final int itemCount;
+
+  const CartItemCounter({Key key, this.itemCount}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String countString = '';
+    if (itemCount < 10) {
+      countString = '$itemCount';
+    } else {
+      countString = '+9';
+    }
+    return InkWell(
+      onTap: () => navigateTo(context, CartPage()),
+      child: Stack(
+        children: [
+          CircleAvatar(
+            child: Icon(Icons.shopping_cart),
+          ),
+          Positioned(
+            top: 0.0,
+            right: 0.0,
+            child: CircleAvatar(
+              radius: 12.0,
+              backgroundColor: Colors.red,
+              child: Text(countString),
             ),
           ),
         ],

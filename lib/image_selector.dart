@@ -4,7 +4,7 @@ class ImageSelector extends StatefulWidget {
 
   final Function(String) onImageSelected;
 
-  const ImageSelector({Key key, this.onImageSelected}) : super(key: key);
+  ImageSelector({Key key, this.onImageSelected}) : super(key: key);
 
   @override
   _ImageSelectorState createState() => _ImageSelectorState();
